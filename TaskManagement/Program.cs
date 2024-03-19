@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using TaskManagement.Data;
+using TaskManagement;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,25 +9,33 @@ builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));//data context is entity framework core
 });//This configures the application's data context to use SQL Server as the database provider
-var app = builder.Build();
+var apps = builder.Build();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+void SeedData(IHost app)
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+
+    using (var scope = app.Services.CreateScope())//This SeedData method initializes the database with initial data by creating a scope
+    {
+        var service = scope.ServiceProvider.GetService<Seed>();
+        service.SeedDataContext();
+    }
 }
 
-app.UseHttpsRedirection();
+// Configure the HTTP request pipeline.
+if (apps.Environment.IsDevelopment())
+{
+    apps.UseSwagger();
+    apps.UseSwaggerUI();
+}
 
-app.UseAuthorization();
+apps.UseHttpsRedirection();
 
-app.MapControllers();
+apps.UseAuthorization();
 
-app.Run();
+apps.MapControllers();
+SeedData(apps);
+apps.Run();
