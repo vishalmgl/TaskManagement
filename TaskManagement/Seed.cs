@@ -1,7 +1,10 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 using TaskManagement.Data;
 using TaskManagement.Model;
- 
 
 namespace TaskManagement
 {
@@ -24,7 +27,7 @@ namespace TaskManagement
                     {
                         Title = "Task 1",
                         Description = "Description for Task 1",
-                        DueDate =new DateTime(2002,1,1),
+                        DueDate = new DateTime(2002,1,1),
                         Status = "Pending",
                         AssignedUsers = new List<TaskAssignment>
                         {
@@ -36,9 +39,9 @@ namespace TaskManagement
                     {
                         Title = "Task 2",
                         Description = "Description for Task 2",
-                        DueDate =new DateTime(2002,2,1),
+                        DueDate = new DateTime(2002,2,1),
                         Status = "InProgress",
-                        AssignedUsers = new List<TaskAssignment> 
+                        AssignedUsers = new List<TaskAssignment>
                         {
                             new TaskAssignment { User = new User { UserName = "user3", Email = "user3@example.com" } }
                         }
@@ -47,7 +50,7 @@ namespace TaskManagement
                     {
                         Title = "Task 3",
                         Description = "Description for Task 3",
-                        DueDate =new DateTime (2002, 3, 1),
+                        DueDate = new DateTime(2002, 3, 1),
                         Status = "Completed",
                         AssignedUsers = new List<TaskAssignment>
                         {

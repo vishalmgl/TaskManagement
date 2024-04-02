@@ -5,23 +5,24 @@ using TaskManagement;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<DataContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));//data context is entity framework core
-});
+
 builder.Services.AddControllers();
 builder.Services.AddTransient<Seed>();//Make sure that the Seed service is registered in the dependency injection container (IServiceCollection) during application startup.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();//This configures the application's data context to use SQL Server as the database provider
+builder.Services.AddDbContext<DataContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));//data context is entity framework core
+});
 var apps = builder.Build();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 
-void SeedData(IHost app)
+void SeedData(IHost apps)
 {
 
-    using (var scope = app.Services.CreateScope())//This SeedData method initializes the database with initial data by creating a scope
+    using (var scope = apps.Services.CreateScope())//This SeedData method initializes the database with initial data by creating a scope
     {
         var service = scope.ServiceProvider.GetService<Seed>();
         service.SeedDataContext();
