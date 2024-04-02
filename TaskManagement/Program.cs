@@ -8,12 +8,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));//data context is entity framework core
-});//This configures the application's data context to use SQL Server as the database provider
-var apps = builder.Build();
+});
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddTransient<Seed>();//Make sure that the Seed service is registered in the dependency injection container (IServiceCollection) during application startup.
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen();//This configures the application's data context to use SQL Server as the database provider
+var apps = builder.Build();
+
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 
 void SeedData(IHost app)
 {
