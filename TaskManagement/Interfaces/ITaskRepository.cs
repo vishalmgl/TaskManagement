@@ -9,6 +9,8 @@ namespace TaskManagement.Interfaces
         bool CreateTask(Task task);
         bool UpdateTask(Task task);
         bool DeleteTask(Task task);
+        bool AssignTaskToUser(int TaskID, int UserID);
+        bool UnassignTaskFromUser(int TaskID, int UserID);
         bool Save();
 
         
