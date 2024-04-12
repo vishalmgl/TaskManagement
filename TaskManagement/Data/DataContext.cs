@@ -14,7 +14,7 @@ namespace TaskManagement.Data
         // Define DbSet for each entity
         public DbSet<Model.Task> Tasks { get; set; } // DbSet for Task entity//contains system.threading.tasks.task so using model
         public DbSet<User> Users { get; set; } // DbSet for User entity
-        public DbSet<TaskAssignment> TaskAssignments { get; set; } // DbSet for TaskAssignment entity
+        public DbSet<TaskAssignment> TaskAssignments { get; set; }// DbSet for TaskAssignment entity
 
         // Override OnModelCreating method to configure entity relationships
         protected override void OnModelCreating(ModelBuilder modelBuilder)
