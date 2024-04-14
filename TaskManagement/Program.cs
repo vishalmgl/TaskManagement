@@ -1,6 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using TaskManagement.Data;
 using TaskManagement;
+using System.Text.Json.Serialization;
+using TaskManagement.Interfaces;
+using TaskManagement.Model;
+using TaskManagement.Repository;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +13,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddTransient<Seed>();//Make sure that the Seed service is registered in the dependency injection container (IServiceCollection) during application startup.
+builder.Services.AddControllers().AddJsonOptions(x =>
+                                    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+builder.Services.AddScoped<ITaskAssignmentRepository,TaskAssignmentRepository>();
+builder.Services.AddScoped<ITaskRepository,TaskRepository>();
+builder.Services.AddScoped<IUserRepository,UserRepository>();
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();//This configures the application's data context to use SQL Server as the database provider
 builder.Services.AddDbContext<DataContext>(options =>
