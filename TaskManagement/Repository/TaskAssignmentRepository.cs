@@ -1,20 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskManagement.Interfaces;
 using TaskManagement.Model;
+using TaskManagement.Data;
 
 namespace TaskManagement.Repository
 {
     public class TaskAssignmentRepository : ITaskAssignmentRepository
     {
-        private readonly DbContext _context;
+        private readonly DataContext _context;
 
-        public TaskAssignmentRepository(DbContext context)
+        public TaskAssignmentRepository(DataContext context)
         {
             _context = context;
         }
         public bool CreateTaskAssignment(TaskAssignment TaskAssignment)
         {
-            _context.TaskAssignment.Add(TaskAssignment);
+            _context.TaskAssignments.Add(TaskAssignment);
             _context.SaveChanges();
             return true;
         }

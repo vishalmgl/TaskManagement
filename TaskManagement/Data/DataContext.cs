@@ -1,20 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskManagement.Model;
+using TaskManagement.Data;
 
 namespace TaskManagement.Data
 {
     // DataContext class inherits from DbContext
     public class DataContext : DbContext
-    {
+    { public DbSet<Model.Task> Tasks { get; set; } // DbSet for Task entity//contains system.threading.tasks.task so using model
+        public DbSet<User> Users { get; set; } // DbSet for User entity
+        public DbSet<TaskAssignment> TaskAssignments { get; set; }// DbSet for TaskAssignment entity
         // Constructor with DbContextOptions parameter
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
         }
 
         // Define DbSet for each entity
-        public DbSet<Model.Task> Tasks { get; set; } // DbSet for Task entity//contains system.threading.tasks.task so using model
-        public DbSet<User> Users { get; set; } // DbSet for User entity
-        public DbSet<TaskAssignment> TaskAssignments { get; set; }// DbSet for TaskAssignment entity
+       
 
         // Override OnModelCreating method to configure entity relationships
         protected override void OnModelCreating(ModelBuilder modelBuilder)
