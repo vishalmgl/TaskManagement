@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using TaskManagement.Interfaces;
 using TaskManagement.Model;
 using TaskManagement.dto;
@@ -9,7 +8,7 @@ namespace TaskManagement.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TaskAssignmentsController : ControllerBase
+    public class TaskAssignmentsController : Controller
     {
         private readonly ITaskAssignmentRepository _taskAssignmentRepository;
         private readonly IMapper _mapper;
@@ -24,7 +23,7 @@ namespace TaskManagement.Controllers
         public IActionResult GetTaskAssignments()
         {
             var taskAssignments = _taskAssignmentRepository.GetTaskAssignments();
-            var taskAssignmentDTOs = _mapper.Map<IEnumerable<TaskAssignmentDto>>(taskAssignments);
+            var taskAssignmentDTOs = _mapper.Map<IEnumerable<TaskAssigmnentDto>>(taskAssignments);
             return Ok(taskAssignmentDTOs);
         }
 
@@ -35,36 +34,23 @@ namespace TaskManagement.Controllers
             if (taskAssignment == null)
                 return NotFound();
 
-            var taskAssignmentDTO = _mapper.Map<TaskAssignmentDto>(taskAssignment);
+            var taskAssignmentDTO = _mapper.Map<TaskAssigmnentDto>(taskAssignment);
             return Ok(taskAssignmentDTO);
         }
 
         [HttpPost]
-        public IActionResult CreateTaskAssignment([FromBody] TaskAssignmentDto taskAssignmentDTO)
+        public IActionResult CreateTaskAssignment([FromBody] TaskAssigmnentDto taskAssignmentDTO)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             var taskAssignmentEntity = _mapper.Map<TaskAssignment>(taskAssignmentDTO);
             var createdTaskAssignment = _taskAssignmentRepository.CreateTaskAssignment(taskAssignmentEntity);
-            var createdTaskAssignmentDTO = _mapper.Map<TaskAssignmentDto>(createdTaskAssignment);
+            var createdTaskAssignmentDTO = _mapper.Map<TaskAssigmnentDto>(createdTaskAssignment);
             return CreatedAtAction(nameof(GetTaskAssignment), new { id = createdTaskAssignmentDTO.TaskAssignmentID }, createdTaskAssignmentDTO);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateTaskAssignment(int id, [FromBody] TaskAssignmentDto taskAssignmentDTO)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var taskAssignmentEntity = _mapper.Map<TaskAssignment>(taskAssignmentDTO);
-            var updatedTaskAssignment = _taskAssignmentRepository.UpdateTaskAssignment(id, taskAssignmentEntity);
-            if (updatedTaskAssignment == null)
-                return NotFound();
-
-            return NoContent();
-        }
-
+      
         [HttpDelete("{id}")]
         public IActionResult DeleteTaskAssignment(int id)
         {

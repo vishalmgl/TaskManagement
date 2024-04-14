@@ -43,8 +43,11 @@ namespace TaskManagement.Repository
 
         public bool UpdateUser(User user)
         {
-            _context.Update(user);
-            return Save();
+            _context.Users.Update(user);
+            _context.SaveChanges();
+            return true;
         }
+
+        
     }
 }
