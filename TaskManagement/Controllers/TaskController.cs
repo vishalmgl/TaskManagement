@@ -1,19 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TaskManagement.dto;
-using TaskManagement.Repository;
-using AutoMapper;
+using System.Collections.Generic;
+using TaskManagement.Interfaces;
 using TaskManagement.Model;
+using TaskManagement.dto;
+using AutoMapper;
 
 namespace TaskManagement.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TasksController : Controller
+    public class TaskController : ControllerBase
     {
-        private readonly TaskRepository _taskRepository;
+        private readonly ITaskRepository _taskRepository;
         private readonly IMapper _mapper;
 
-        public TasksController(TaskRepository taskRepository, IMapper mapper)
+        public TaskController(ITaskRepository taskRepository, IMapper mapper)
         {
             _taskRepository = taskRepository;
             _mapper = mapper;
@@ -44,8 +45,8 @@ namespace TaskManagement.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var TaskEntity = _mapper.Map<Model.Task>(taskDTO); 
-            var createdTask = _taskRepository.CreateTask(TaskEntity);
+            var taskEntity = _mapper.Map<Task>(taskDTO);
+            var createdTask = _taskRepository.CreateTask(taskEntity);
             var createdTaskDTO = _mapper.Map<TaskDto>(createdTask);
             return CreatedAtAction(nameof(GetTask), new { id = createdTaskDTO.TaskID }, createdTaskDTO);
         }
@@ -56,10 +57,10 @@ namespace TaskManagement.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var task = _mapper.Map<Model.Task>(taskDTO);
-            task.TaskID = id;
-            var UpdatedTask = _taskRepository.UpdateTask(task);
-            if (UpdatedTask == null)
+            var taskEntity = _mapper.Map<Task>(taskDTO);
+            taskEntity.TaskID = id; // Ensure the correct ID is set for the task
+            var updatedTask = _taskRepository.UpdateTask(taskEntity);
+            if (updatedTask == null)
                 return NotFound();
 
             return NoContent();

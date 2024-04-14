@@ -1,16 +1,14 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
 using TaskManagement.Interfaces;
 using TaskManagement.Model;
 using TaskManagement.dto;
+using AutoMapper;
 
 namespace TaskManagement.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : Controller
+    public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
@@ -48,10 +46,7 @@ namespace TaskManagement.Controllers
 
             var userEntity = _mapper.Map<User>(userDTO);
             var createdUser = _userRepository.CreateUser(userEntity);
-            if (!createdUser)
-                return StatusCode(500, "An error occurred while creating the user.");
-
-            var createdUserDTO = _mapper.Map<UserDto>(userEntity);
+            var createdUserDTO = _mapper.Map<UserDto>(createdUser);
             return CreatedAtAction(nameof(GetUser), new { id = createdUserDTO.UserID }, createdUserDTO);
         }
 
@@ -64,7 +59,7 @@ namespace TaskManagement.Controllers
             var userEntity = _mapper.Map<User>(userDTO);
             userEntity.UserID = id; // Ensure the correct ID is set for the user
             var updatedUser = _userRepository.UpdateUser(userEntity);
-            if (!updatedUser)
+            if (updatedUser == null)
                 return NotFound();
 
             return NoContent();
@@ -79,6 +74,5 @@ namespace TaskManagement.Controllers
 
             return NoContent();
         }
-
     }
 }
