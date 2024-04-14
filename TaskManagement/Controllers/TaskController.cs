@@ -58,7 +58,7 @@ namespace TaskManagement.Controllers
                 return BadRequest(ModelState);
 
             var taskEntity = _mapper.Map<Task>(taskDTO);
-            taskEntity.TaskID = id; // Ensure the correct ID is set for the task
+            taskEntity.TaskID = id; 
             var updatedTask = _taskRepository.UpdateTask(taskEntity);
             if (updatedTask == null)
                 return NotFound();

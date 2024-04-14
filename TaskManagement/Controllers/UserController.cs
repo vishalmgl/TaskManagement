@@ -57,7 +57,7 @@ namespace TaskManagement.Controllers
                 return BadRequest(ModelState);
 
             var userEntity = _mapper.Map<User>(userDTO);
-            userEntity.UserID = id; // Ensure the correct ID is set for the user
+            userEntity.UserID = id; 
             var updatedUser = _userRepository.UpdateUser(userEntity);
             if (updatedUser == null)
                 return NotFound();
