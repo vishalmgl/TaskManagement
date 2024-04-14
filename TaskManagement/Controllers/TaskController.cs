@@ -2,14 +2,14 @@
 using TaskManagement.dto;
 using TaskManagement.Repository;
 using AutoMapper;
-using TaskManagement.Model;
-using System.Threading.Tasks; // Import the correct namespace for System.Threading.Tasks
+using TaskManagement.Model; // Add this namespace
+using System.Collections.Generic;
 
 namespace TaskManagement.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TasksController : ControllerBase // Change ControllerBase instead of Controller
+    public class TasksController : ControllerBase
     {
         private readonly TaskRepository _taskRepository;
         private readonly IMapper _mapper;
@@ -45,7 +45,7 @@ namespace TaskManagement.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var taskEntity = _mapper.Map<Task>(taskDTO);
+            var taskEntity = _mapper.Map<TaskManagement.Model.Task>(taskDTO); // Fully qualify Task here
             var createdTask = _taskRepository.CreateTask(taskEntity);
             var createdTaskDTO = _mapper.Map<TaskDto>(createdTask);
             return CreatedAtAction(nameof(GetTask), new { id = createdTaskDTO.TaskID }, createdTaskDTO);
@@ -57,7 +57,8 @@ namespace TaskManagement.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var task = _mapper.Map<Task>(taskDTO);
+            var task = _mapper.Map<TaskManagement.Model.Task>(taskDTO); // Fully qualify Task here
+            task.TaskID = id;
             var updatedTask = _taskRepository.UpdateTask(task);
             if (updatedTask == null)
                 return NotFound();
