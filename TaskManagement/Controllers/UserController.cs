@@ -59,7 +59,7 @@ namespace TaskManagement.Controllers
             var userEntity = _mapper.Map<User>(userDTO);
             userEntity.UserID = id; 
             var updatedUser = _userRepository.UpdateUser(userEntity);
-            if (updatedUser == null)
+           // if (updatedUser == null)
                 return NotFound();
 
             return NoContent();
@@ -68,8 +68,8 @@ namespace TaskManagement.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteUser(int id)
         {
-            var deleted = _userRepository.DeleteUser(id);
-            if (!deleted)
+            //var deleted = _userRepository.DeleteUser(id);
+            //if (!deleted)
                 return NotFound();
 
             return NoContent();

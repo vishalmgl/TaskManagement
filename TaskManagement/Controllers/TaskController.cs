@@ -44,8 +44,8 @@ namespace TaskManagement.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
-            var taskEntity = _mapper.Map<Task>(taskDTO);
+            return NoContent();
+            var taskEntity = _mapper.Map<Model.Task>(taskDTO);
             var createdTask = _taskRepository.CreateTask(taskEntity);
             var createdTaskDTO = _mapper.Map<TaskDto>(createdTask);
             return CreatedAtAction(nameof(GetTask), new { id = createdTaskDTO.TaskID }, createdTaskDTO);
@@ -57,10 +57,10 @@ namespace TaskManagement.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var taskEntity = _mapper.Map<Task>(taskDTO);
+           var taskEntity = _mapper.Map<Model.Task>(taskDTO);
             taskEntity.TaskID = id; 
             var updatedTask = _taskRepository.UpdateTask(taskEntity);
-            if (updatedTask == null)
+           if (updatedTask == null)
                 return NotFound();
 
             return NoContent();
@@ -69,7 +69,7 @@ namespace TaskManagement.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteTask(int id)
         {
-            var deleted = _taskRepository.DeleteTask(id);
+           var deleted = _taskRepository.DeleteTask(id);
             if (!deleted)
                 return NotFound();
 
