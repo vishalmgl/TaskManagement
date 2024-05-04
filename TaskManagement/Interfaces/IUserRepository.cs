@@ -8,6 +8,7 @@ namespace TaskManagement.Interfaces
         User GetUser(int UserID);
         bool CreateUser(User user);
         bool UpdateUser(User user);
+        bool UsersExist(int UserID);
         bool DeleteUser(User User);
         bool Save();
 

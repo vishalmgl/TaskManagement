@@ -1,4 +1,5 @@
-﻿using TaskManagement.Data;
+﻿using System.Threading.Tasks;
+using TaskManagement.Data;
 using TaskManagement.Interfaces;
 using TaskManagement.Model;
 
@@ -48,6 +49,9 @@ namespace TaskManagement.Repository
             return true;
         }
 
-        
+        public bool UsersExist(int UserID)
+        {
+            return _context.Users.Where(e => e.UserID == UserID).Any();
+        }
     }
 }

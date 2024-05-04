@@ -15,16 +15,7 @@ namespace TaskManagement.Repository
 
         public bool AssignTaskToUser(int TaskID, int UserID)
         {
-            var task = _context.Tasks.Find(TaskID);
-            var user = _context.Tasks.Find(UserID);
-            if (task == null || user == null)
-                return false;
-            var TaskAssignment=new Model.TaskAssignment ();
-            TaskAssignment.TaskID = TaskID;
-            TaskAssignment.UserID = UserID;
-            task.AssignedUsers.Add(TaskAssignment);
-            _context.SaveChanges();
-            return true;
+            throw new NotImplementedException();
         }
 
         public bool CreateTask(Task task)
@@ -55,6 +46,11 @@ namespace TaskManagement.Repository
         {
             var Saved=_context.SaveChanges();
             return Saved >0 ? true : false;
+        }
+
+        public bool TaskExists(int TaskID)
+        {
+            return _context.Tasks.Where(e => e.TaskID == TaskID).Any();
         }
 
         public bool UnassignTaskFromUser(int TaskID, int UserID)

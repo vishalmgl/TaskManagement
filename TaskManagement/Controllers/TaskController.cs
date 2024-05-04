@@ -9,7 +9,7 @@ namespace TaskManagement.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TaskController : ControllerBase
+    public class TaskController : Controller
     {
         private readonly ITaskRepository _taskRepository;
         private readonly IMapper _mapper;
@@ -21,59 +21,100 @@ namespace TaskManagement.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Model.Task>))]
         public IActionResult GetTasks()
         {
-            var tasks = _taskRepository.GetTasks();
-            var taskDTOs = _mapper.Map<IEnumerable<TaskDto>>(tasks);
-            return Ok(taskDTOs);
-        }
+            var tasks = _mapper.Map<List<TaskDto>>(_taskRepository.GetTasks());
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
 
-        [HttpGet("{id}")]
-        public IActionResult GetTask(int id)
+            }
+            return Ok(tasks);
+        }
+        [HttpGet("{TaskID}")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Model.Task>))]
+        [ProducesResponseType(400)]
+        public IActionResult GetTask(int TaskID)
         {
-            var task = _taskRepository.GetTask(id);
-            if (task == null)
+            if (_taskRepository.TaskExists(TaskID))
                 return NotFound();
+            var task = _taskRepository.GetTask(TaskID);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
 
-            var taskDTO = _mapper.Map<TaskDto>(task);
-            return Ok(taskDTO);
+            }
+            return Ok(task);
         }
-
         [HttpPost]
-        public IActionResult CreateTask([FromBody] TaskDto taskDTO)
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateTask([FromBody] TaskDto TaskCreate)
         {
+            if (TaskCreate == null)
+                return BadRequest(ModelState);
+            var tasks = _taskRepository.GetTasks().Where(c => c.Title.Trim().ToUpper() == TaskCreate.Title.TrimEnd().ToUpper()).FirstOrDefault();
+            if (tasks != null)
+            {
+                ModelState.AddModelError("", "Task Already exists");
+                return StatusCode(422, ModelState);
+
+            }
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            return NoContent();
-            var taskEntity = _mapper.Map<Model.Task>(taskDTO);
-            var createdTask = _taskRepository.CreateTask(taskEntity);
-            var createdTaskDTO = _mapper.Map<TaskDto>(createdTask);
-            return CreatedAtAction(nameof(GetTask), new { id = createdTaskDTO.TaskID }, createdTaskDTO);
-        }
+            var TaskMaps = _mapper.Map<Model.Task>(TaskCreate);
+            if (!_taskRepository.CreateTask(TaskMaps))
+            {
+                ModelState.AddModelError("", "somthing went wrong while saving");
+                return StatusCode(500, ModelState);
+            }
+            return Ok("successfully created");
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateTask(int id, [FromBody] TaskDto taskDTO)
+        }
+        [HttpPut("{TaskID}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateTask(int TaskID, [FromBody] TaskDto UpdateTask)
         {
+            if (UpdateTask == null)
+                return BadRequest(ModelState);
+            if (TaskID != UpdateTask.TaskID)
+                return BadRequest(ModelState);
+            if (!_taskRepository.TaskExists(TaskID))
+                return NotFound();
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
-           var taskEntity = _mapper.Map<Model.Task>(taskDTO);
-            taskEntity.TaskID = id; 
-            var updatedTask = _taskRepository.UpdateTask(taskEntity);
-           if (updatedTask == null)
-                return NotFound();
-
+            var UpdateMap = _mapper.Map<Model.Task>(UpdateTask);
+            if (!_taskRepository.UpdateTask(UpdateMap))
+            {
+                ModelState.AddModelError("", "somthing went wrong updating task");
+                return StatusCode(500, ModelState);
+            }
             return NoContent();
         }
-
-        [HttpDelete("{id}")]
-        public IActionResult DeleteTask(int id)
+        [HttpDelete("{TaskID}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteTask(int TaskID)
         {
-           var deleted = _taskRepository.DeleteTask(id);
-            if (!deleted)
+            if (!_taskRepository.TaskExists(TaskID))
+            {
                 return NotFound();
 
+            }
+            var TaskDelete = _taskRepository.GetTask(TaskID);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            if (!_taskRepository.DeleteTask(TaskDelete))
+            {
+                ModelState.AddModelError("", "something went wrong deleAting category");
+
+            }
             return NoContent();
+
         }
     }
 }
