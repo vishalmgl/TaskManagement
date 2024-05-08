@@ -13,10 +13,7 @@ namespace TaskManagement.Repository
             _context = context;
         }
 
-        public bool AssignTaskToUser(int TaskID, int UserID)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public bool CreateTask(Task task)
         {
@@ -53,10 +50,7 @@ namespace TaskManagement.Repository
             return _context.Tasks.Where(e => e.TaskID == TaskID).Any();
         }
 
-        public bool UnassignTaskFromUser(int TaskID, int UserID)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public bool UpdateTask(Task task)
         {
