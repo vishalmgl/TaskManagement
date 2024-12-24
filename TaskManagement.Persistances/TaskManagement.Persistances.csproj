@@ -15,9 +15,5 @@
 		</PackageReference>
 		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.3.2" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\TaskManagement.Domain\TaskManagement.Domain.csproj" />
-	</ItemGroup>
 	
 </Project>

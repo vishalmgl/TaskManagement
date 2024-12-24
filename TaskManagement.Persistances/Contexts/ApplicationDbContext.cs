@@ -29,5 +29,13 @@ namespace TaskManagement.Persistances.Contexts
             modelBuilder.ApplyConfiguration(new StateConfiguration());
             modelBuilder.ApplyConfiguration(new ContactDetailsConfiguration());
         }
+        public Task RefreshAsync()
+        {
+            foreach (var entry in ChangeTracker.Entries().ToList())
+            {
+                entry.State = EntityState.Detached;
+            }
+            return Task.FromResult(0);
+        }
     }
 }
