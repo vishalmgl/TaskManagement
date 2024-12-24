@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagement", "TaskManag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagement.Domain", "TaskManagement.Domain\TaskManagement.Domain.csproj", "{1E0752D2-F580-4F94-A668-7041A740E3CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagement.Persistances", "TaskManagement.Persistances\TaskManagement.Persistances.csproj", "{463F2769-18EB-4334-9FCB-5F38FB04D218}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1E0752D2-F580-4F94-A668-7041A740E3CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E0752D2-F580-4F94-A668-7041A740E3CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E0752D2-F580-4F94-A668-7041A740E3CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{463F2769-18EB-4334-9FCB-5F38FB04D218}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{463F2769-18EB-4334-9FCB-5F38FB04D218}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{463F2769-18EB-4334-9FCB-5F38FB04D218}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{463F2769-18EB-4334-9FCB-5F38FB04D218}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
